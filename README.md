@@ -1,10 +1,11 @@
-# Rockstar Genetics
+# Keyboard Genetics
 
-This is an attempt to redefine the [rockstar keyboard layout](https://github.com/MadRabbit/rockstar-layout)
-by utilizing some genetic algorithms and stuff. The goal is to build the ultimate
-keyboard layout suitable for programming.
+This project is an attempt to find the most efficient keyboard layout by using
+the genetic algorithms approach.
 
-__NOTE__: WIP, like totally
+__NOTE__: WIP. Follow the project write up over here:
+
+[Optimal Keyboard](http://nikolay.rocks/categories/optimal+keyboard)
 
 ## Usage
 
