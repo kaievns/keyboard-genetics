@@ -4,7 +4,7 @@
   "description": "Genetic keyboard layout creator",
   "main": "lib/index.js",
   "scripts": {
-    "start": "babel-node ./lib/index.js",
+    "start": "node --harmony_destructuring lib/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,14 +18,9 @@
   },
   "homepage": "https://github.com/MadRabbit/rockstar-genetics#readme",
   "dependencies": {
-    "babel-cli": "^6.6.5",
-    "babel-core": "^6.7.2",
-    "babel-plugin-syntax-async-functions": "^6.5.0",
-    "babel-plugin-transform-async-to-generator": "^6.7.0",
-    "babel-plugin-transform-es2015-destructuring": "^6.5.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.7.0",
     "blessed": "^0.1.81",
     "blessed-contrib": "^3.5.4",
-    "chalk": "^1.1.1"
+    "chalk": "^1.1.1",
+    "co": "^4.6.0"
   }
 }
