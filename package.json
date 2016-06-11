@@ -4,8 +4,8 @@
   "description": "Genetic keyboard layout creator",
   "main": "lib/index.js",
   "scripts": {
-    "start": "node --harmony_destructuring lib/index.js",
-    "test": "node --harmony_destructuring lib/compare.js"
+    "start": "node lib/index.js",
+    "test": "node lib/compare.js"
   },
   "repository": {
     "type": "git",
