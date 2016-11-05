@@ -1,4 +1,4 @@
-const Runner = require('../src/runner-new');
+const Runner = require('../src/runner');
 const { QWERTY, Dvorak, Colemak, Workman } = require('../src/presets');
 const text = `
 A long time ago in a galaxy far, far away

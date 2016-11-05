@@ -1,81 +1,100 @@
-const { EFFORTS, DISTANCES } = require("./config");
-const stats                  = require("./stats");
-
-/**
- * Runs the layout against the text and returns final stats
- *
- * @param {Layout} layout
- * @param {string} text
- * @return {Object} stats
- */
-exports.measure = function measure(layout, text) {
-  const { keys }   = layout;
-  const START_TIME = new Date();
-  const MAX_EFFORT = 16900000;
-
-  // a hand to an opposite shift efforts/distances
-  const SHIFT_EFFORTS = Object.assign(Object.create(null), {
-    l: EFFORTS['r-shift'], r: EFFORTS['l-shift']
-  });
-
-  let position  = 0;
-  let distance  = 0;
-  let effort    = 0;
-  let prevKey   = keys[' '];
-  let prevShift = null;
-  let counts    = Object.assign(Object.create(null), {
-    'l-pinky': 0, 'l-ring': 0, 'l-middle': 0, 'l-point': 0,
-    'r-pinky': 0, 'r-ring': 0, 'r-middle': 0, 'r-point': 0,'thumb': 0
-  });
-
-
-  while (effort < MAX_EFFORT) {
-    const i   = position++ % text.length;
-    const key = keys[text[i]];
-    if (key === undefined) { continue; } // skip weird characters
-
-    const c_finger = key.finger;
-    const c_hand   = key.hand;
-    const p_hand   = prevKey.hand;
-    const c_effort = key.effort;
-
-    // base cost of the movement
-    effort   += c_effort;
-    distance += key.distance;
-
-    // counting in a reached out finger return overhead
-    // we're counting the efforts as 2/3rds because they're aimless
-    if (prevKey !== key) {
-      if (c_finger === prevKey.finger) {
-        // same finger overhead
-        effort   += ~~(prevKey.effort * 1);
-      } else if (c_hand === p_hand && prevKey.reach) {
-        // same hand retraction from a reach-out position
-        effort   += ~~(prevKey.effort * 2/3);
-      } else if (c_hand === p_hand) {
-        // basic same hand usage penalty
-        effort  += ~~(c_effort * 1/2);
-      } else if (c_hand === prevShift) {
-        // same hand retraction from pressing a shift button
-        const shiftKey = c_hand === "r" ? "l" : "r"; // reversed in the config
-        effort   += ~~(SHIFT_EFFORTS[shiftKey] * 4/3);
-      }
-    }
-
-    // couting in the shift movements
-    if (key.shift) {
-      if (prevShift !== c_hand) {
-        prevShift = c_hand;
-
-        effort   += SHIFT_EFFORTS[prevShift];
-      }
-    } else {
-      prevShift = null;
-    }
-
-    counts[c_finger] += 1;
-    prevKey = key;
+module.exports = class Runner {
+  constructor(text, options) {
+    this.text = text.trim();
+    this.options = options;
   }
 
-  return stats(position, effort, distance, counts);
-}
+  typeWith(layout) {
+    const {
+      effortLimit = 100,
+      sameFingerPenalty = 1,
+      sameHandPenalty = 1
+    } = this.options;
+    const mapping = layout.toMetrics();
+    const text = this.text;
+    const L_SHIFT = mapping['l-shift'];
+    const R_SHIFT = mapping['r-shift'];
+    const counts  = Object.assign(Object.create(null), {
+      'l-pinky': [0,0,0,0], 'l-ring': [0,0,0,0], 'l-middle': [0,0,0,0], 'l-point': [0,0,0,0],
+      'r-pinky': [0,0,0,0], 'r-ring': [0,0,0,0], 'r-middle': [0,0,0,0], 'r-point': [0,0,0,0]
+    });
+
+    let position = 0;
+    let distance = 0;
+    let effort = 0;
+    let sameFingerOverheads = 0;
+    let sameHandOverheads = 0;
+    let shiftingOverheads = 0;
+    let prevKey = mapping[' '];
+    let prevShift = false;
+
+    while (effort < effortLimit) {
+      const i = position++ % text.length;
+      const symbol = text[i];
+      const key = mapping[symbol];
+      if (key === undefined) {
+        prevKey = mapping[' '];
+        continue;
+      }
+
+      const hand = key.hand;
+      const finger = key.finger;
+
+      // console.log(JSON.stringify(symbol), key.finger, key.hand, key.effort, 'prev shift', prevShift && prevShift.hand);
+
+      // basic calculation
+      distance += key.distance;
+      effort += key.effort;
+
+      // various hand movement overheads
+      if (hand !== false && key !== prevKey) { // skipping repeats and spaces
+        if (finger === prevKey.finger) { // same finger usage penalty
+          const overhead = prevKey.effort * sameFingerPenalty;
+          // console.log('      same finger overhead', overhead);
+          effort += overhead;
+          sameFingerOverheads += overhead;
+        } else if (hand === prevKey.hand) { // same hand usage penalty
+          const overhead = prevKey.effort * sameHandPenalty;
+          // console.log('      same hand overhead', overhead);
+          effort += overhead;
+          sameHandOverheads += overhead;
+        } else if (prevShift !== null && prevShift.hand === hand) { // retraction from a shift position penalty
+          const overhead = prevShift.effort * sameHandPenalty;
+          // console.log('     retraction from shift overhead');
+          effort += overhead;
+          sameHandOverheads += overhead;
+        }
+      }
+
+      // pressing the shift button overhead
+      if (key.shift) {
+        prevShift = hand === 'r' ? L_SHIFT : R_SHIFT;
+        // console.log('     pressing shift overhead', prevShift.effort);
+        effort += prevShift.effort;
+        shiftingOverheads += prevShift.effort;
+        distance += prevShift.distance;
+      } else {
+        prevShift = null;
+      }
+
+      // handling the counting
+      if (hand !== false) {
+        counts[finger][key.row] += 1;
+      }
+
+      prevKey = key;
+    }
+
+    return {
+      position,
+      distance,
+      effort: Math.round(effort),
+      overheads: {
+        sameHand: Math.round(sameHandOverheads),
+        sameFinger: Math.round(sameFingerOverheads),
+        shifting: Math.round(shiftingOverheads)
+      },
+      counts
+    };
+  }
+};
