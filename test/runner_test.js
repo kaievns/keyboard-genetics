@@ -1,5 +1,5 @@
 const Runner = require('../src/runner-new');
-const { QWERTY, Workman } = require('../src/presets');
+const { QWERTY, Workman, Dvorak } = require('../src/presets');
 const text = `
 A long time ago in a galaxy far, far away
 
@@ -14,30 +14,51 @@ people and restore freedom to the galaxy...
 `;
 
 describe('Runner', () => {
-  const options = { effortLimit: 1000, sameHandOverhead: 0.5, sameFingerOverhead: 5 };
-  const runner = new Runner(text, options);
+  const runner = new Runner(text, {
+    effortLimit: 2000,
+    sameHandPenalty: 0.5,
+    sameFingerPenalty: 5
+  });
 
   it('counts stuff in QWERTY', () => {
     const result = runner.typeWith(QWERTY);
     expect(result).to.eql({
-      distance: 1729,
-      effort: 1001,
+      distance: 3285,
+      effort: 2004,
       overheads: {
-        sameHand: 124,
-        sameFinger: 120
-      }
+        sameHand: 244,
+        sameFinger: 290,
+        shifting: 125
+      },
+      position: 407
+    });
+  });
+
+  it('counts stuff in Dvorak', () => {
+    const result = runner.typeWith(Dvorak);
+    expect(result).to.eql({
+      distance: 2883,
+      effort: 2011,
+      overheads: {
+        sameHand: 125,
+        sameFinger: 490,
+        shifting: 134
+      },
+      position: 586
     });
   });
 
   it('counts stuff in Workman', () => {
     const result = runner.typeWith(Workman);
     expect(result).to.eql({
-      distance: 2036,
-      effort: 1005,
+      distance: 3697,
+      effort: 2001,
       overheads: {
-        sameHand: 93,
-        sameFinger: 135
-      }
+        sameHand: 228,
+        sameFinger: 255,
+        shifting: 204
+      },
+      position: 833
     });
   });
 });

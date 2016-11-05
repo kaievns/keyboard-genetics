@@ -76,7 +76,7 @@ function parse(string) {
     distance: DISTANCES['l-shift'],
     finger: FINGERS['l-shift'],
     shift: false,
-    hand: false,
+    hand: 'l',
     row: 0
   });
 
@@ -85,7 +85,7 @@ function parse(string) {
     distance: DISTANCES['r-shift'],
     finger: FINGERS['r-shift'],
     shift: false,
-    hand: false,
+    hand: 'r',
     row: 0
   });
 

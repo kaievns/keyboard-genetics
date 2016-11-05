@@ -80,7 +80,7 @@ describe('Layout', () => {
       distance: DISTANCES['l-shift'],
       finger: FINGERS['l-shift'],
       shift: false,
-      hand: false,
+      hand: 'l',
       row: 0
     });
     expect(metrics['r-shift']).to.eql({
@@ -88,7 +88,7 @@ describe('Layout', () => {
       distance: DISTANCES['r-shift'],
       finger: FINGERS['r-shift'],
       shift: false,
-      hand: false,
+      hand: 'r',
       row: 0
     });
     expect(metrics['~']).to.eql({

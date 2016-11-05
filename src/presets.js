@@ -54,15 +54,15 @@ const presets = {
       z x c v b k m , . /
       Z X C V B K M < > ?
   `,
-  Dworak: `
+  Dvorak: `
   \` 1 2 3 4 5 6 7 8 9 0 [ ]
    ~ ! @ # $ % ^ & * ( ) { }
-   ' , . p y f g c r l / = \\
-   " < > P Y F G C R L ? + |
-   a o e u i d h t n s - \\n
-   A O E U I D H T N S _ \\n
-    ; q j k x b m w v z
-    : Q J K X B M W V Z
+     ' , . p y f g c r l / = \\
+     " < > P Y F G C R L ? + |
+     a o e u i d h t n s - \\n
+     A O E U I D H T N S _ \\n
+      ; q j k x b m w v z
+      : Q J K X B M W V Z
   `
 };
 
