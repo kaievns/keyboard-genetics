@@ -26,7 +26,12 @@ module.exports = class Layout {
 // parses the layout and creates symbol -> querty letter mapping
 function parse(string) {
   const keynames = Object.keys(DISTANCES);
-  const lines = string.trim().split("\n").map(l => l.trim().split(/\s+/));
+  keynames[0] = '~'; keynames[10] = '0'; // patching the keys order
+  const lines = string.trim().split("\n").map(l =>
+    l.trim().split(/\s+/).map(symbol =>
+      symbol === '\\n' ? '\n' : symbol
+    )
+  );
   const keys  = flat();
 
   for (let i=0; i < lines.length / 2; i++) {
@@ -83,6 +88,8 @@ function parse(string) {
     hand: false,
     row: 0
   });
+
+  keys['\n'].shift = false;
 
   return keys;
 }

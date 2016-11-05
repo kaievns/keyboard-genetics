@@ -14,14 +14,30 @@ people and restore freedom to the galaxy...
 `;
 
 describe('Runner', () => {
-  const options = { effortLimit: 100 };
+  const options = { effortLimit: 1000, sameHandOverhead: 0.5, sameFingerOverhead: 5 };
   const runner = new Runner(text, options);
 
   it('counts stuff in QWERTY', () => {
     const result = runner.typeWith(QWERTY);
     expect(result).to.eql({
-      distance: 225,
-      effort: 102
+      distance: 1729,
+      effort: 1001,
+      overheads: {
+        sameHand: 124,
+        sameFinger: 120
+      }
+    });
+  });
+
+  it('counts stuff in Workman', () => {
+    const result = runner.typeWith(Workman);
+    expect(result).to.eql({
+      distance: 2036,
+      effort: 1005,
+      overheads: {
+        sameHand: 93,
+        sameFinger: 135
+      }
     });
   });
 });

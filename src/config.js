@@ -41,7 +41,7 @@ exports.ROWS = buildMapping(`
 `);
 
 exports.FINGERS = buildMapping(`
-  a a b c d d e e f g h h h
+  a a b c d d e e f g g h h
     a b c d d e e f g h h h h
     a b c d d e e f g h h h
      a b c d d e e f g h

@@ -83,13 +83,37 @@ describe('Layout', () => {
       hand: false,
       row: 0
     });
-    expect(metrics['r-shift']).to.include({
+    expect(metrics['r-shift']).to.eql({
       effort: EFFORTS['r-shift'],
       distance: DISTANCES['r-shift'],
       finger: FINGERS['r-shift'],
       shift: false,
       hand: false,
       row: 0
+    });
+    expect(metrics['~']).to.eql({
+      effort: EFFORTS['~'],
+      distance: DISTANCES['~'],
+      finger: FINGERS['~'],
+      hand: 'l',
+      shift: true,
+      row: 4
+    });
+    expect(metrics['0']).to.eql({
+      effort: EFFORTS['0'],
+      distance: DISTANCES['0'],
+      finger: FINGERS['0'],
+      hand: 'r',
+      shift: false,
+      row: 4
+    });
+    expect(metrics['\n']).to.eql({
+      effort: EFFORTS['\n'],
+      distance: DISTANCES['\n'],
+      finger: FINGERS['\n'],
+      hand: 'r',
+      shift: false,
+      row: 2
     });
   });
 });
