@@ -17,7 +17,7 @@ The project is officially finished and the final result can be found over here
    you will have to use your own source.
 
 3. Run `npm start` to boot the AI design process. Exact constrains can be set
-   in the `lib/genome.js` file.
+   in the `src/genome.js` file.
 
 4. Run `npm test` to run the final comparisons against existing layouts
 
