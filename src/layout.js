@@ -17,10 +17,15 @@ module.exports = class Layout {
   toSequence() {
     return this.toString().trim().replace(/\s+/g, "").replace("\\n", "\n");
   }
+
+  toMetrics() {
+    return parse(this.config);
+  }
 };
 
 // parses the layout and creates symbol -> querty letter mapping
 function parse(string) {
+  const keynames = Object.keys(DISTANCES);
   const lines = string.trim().split("\n").map(l => l.trim().split(/\s+/));
   const keys  = flat();
 
@@ -29,6 +34,7 @@ function parse(string) {
     const shifted_line = lines[i * 2 + 1];
 
     for (let j=0; j < normal_line.length; j++) {
+      const name = keynames.shift();
       const key = {
         effort:   EFFORTS[name],
         distance: DISTANCES[name],
@@ -58,6 +64,24 @@ function parse(string) {
     shift:    false,
     hand:     false,
     row:      0
+  });
+
+  keys['l-shift'] = flat({
+    effort: EFFORTS['l-shift'],
+    distance: DISTANCES['l-shift'],
+    finger: FINGERS['l-shift'],
+    shift: false,
+    hand: false,
+    row: 0
+  });
+
+  keys['r-shift'] = flat({
+    effort: EFFORTS['r-shift'],
+    distance: DISTANCES['r-shift'],
+    finger: FINGERS['r-shift'],
+    shift: false,
+    hand: false,
+    row: 0
   });
 
   return keys;

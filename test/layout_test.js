@@ -1,4 +1,5 @@
 const Layout = require('../src/layout');
+const { DISTANCES, EFFORTS, FINGERS, ROWS } = require('../src/config');
 const QWERTY = `
 \` 1 2 3 4 5 6 7 8 9 0 - =
  ~ ! @ # $ % ^ & * ( ) _ +
@@ -30,5 +31,65 @@ describe('Layout', () => {
     expect(layout.toSequence()).to.eql(
       '`1234567890-=qwertyuiop[]\\asdfghjkl;\'\nzxcvbnm,./'
     );
+  });
+
+  it('can expose the layouts metrics map', () => {
+    const metrics = layout.toMetrics();
+    expect(metrics['q']).to.eql({
+      effort: EFFORTS['q'],
+      distance: DISTANCES['q'],
+      finger: FINGERS['q'],
+      shift: false,
+      hand: 'l',
+      row: 3
+    });
+    expect(metrics['Q']).to.eql({
+      effort: EFFORTS['q'],
+      distance: DISTANCES['q'],
+      finger: FINGERS['q'],
+      shift: true,
+      hand: 'l',
+      row: 3
+    });
+    expect(metrics[';']).to.eql({
+      effort: EFFORTS[';'],
+      distance: DISTANCES[';'],
+      finger: FINGERS[';'],
+      hand: 'r',
+      shift: false,
+      row: 2
+    });
+    expect(metrics[':']).to.eql({
+      effort: EFFORTS[';'],
+      distance: DISTANCES[';'],
+      finger: FINGERS[';'],
+      hand: 'r',
+      shift: true,
+      row: 2
+    });
+    expect(metrics[' ']).to.eql({
+      effort:   0,
+      distance: 0,
+      finger:   'thumb',
+      shift:    false,
+      hand:     false,
+      row:      0
+    });
+    expect(metrics['l-shift']).to.eql({
+      effort: EFFORTS['l-shift'],
+      distance: DISTANCES['l-shift'],
+      finger: FINGERS['l-shift'],
+      shift: false,
+      hand: false,
+      row: 0
+    });
+    expect(metrics['r-shift']).to.include({
+      effort: EFFORTS['r-shift'],
+      distance: DISTANCES['r-shift'],
+      finger: FINGERS['r-shift'],
+      shift: false,
+      hand: false,
+      row: 0
+    });
   });
 });
