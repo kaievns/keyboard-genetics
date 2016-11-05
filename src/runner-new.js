@@ -14,6 +14,10 @@ module.exports = class Runner {
     const text = this.text;
     const L_SHIFT = mapping['l-shift'];
     const R_SHIFT = mapping['r-shift'];
+    const counts  = Object.assign(Object.create(null), {
+      'l-pinky': [0,0,0,0], 'l-ring': [0,0,0,0], 'l-middle': [0,0,0,0], 'l-point': [0,0,0,0],
+      'r-pinky': [0,0,0,0], 'r-ring': [0,0,0,0], 'r-middle': [0,0,0,0], 'r-point': [0,0,0,0]
+    });
 
     let position = 0;
     let distance = 0;
@@ -35,9 +39,11 @@ module.exports = class Runner {
 
       // console.log(JSON.stringify(symbol), key.finger, key.hand, key.effort, 'prev shift', prevShift && prevShift.hand);
 
+      // basic calculation
       distance += key.distance;
       effort += key.effort;
 
+      // various hand movement overheads
       if (key.hand !== false && key !== prevKey) { // skipping repeats and spaces
         if (key.finger === prevKey.finger) { // same finger usage penalty
           const overhead = prevKey.effort * sameFingerPenalty;
@@ -57,6 +63,7 @@ module.exports = class Runner {
         }
       }
 
+      // pressing the shift button overhead
       if (key.shift) {
         prevShift = key.hand === 'r' ? L_SHIFT : R_SHIFT;
         // console.log('     pressing shift overhead', prevShift.effort);
@@ -65,6 +72,11 @@ module.exports = class Runner {
         distance += prevShift.distance;
       } else {
         prevShift = null;
+      }
+
+      // handling the counting
+      if (key.hand !== false) {
+        counts[key.finger][key.row] += 1;
       }
 
       prevKey = key;
@@ -78,7 +90,8 @@ module.exports = class Runner {
         sameHand: Math.round(sameHandOverheads),
         sameFinger: Math.round(sameFingerOverheads),
         shifting: Math.round(shiftingOverheads)
-      }
+      },
+      counts
     };
   }
 };
