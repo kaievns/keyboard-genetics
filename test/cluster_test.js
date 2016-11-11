@@ -12,7 +12,12 @@ describe('Cluster', () => {
   });
 
   it('allows to run a bunch of layouts', function * () {
-    const results = yield cluster.runCollection(layouts);
+    const results = [];
+
+    for (const promise of cluster.schedule(layouts)) {
+      results.push(yield promise);
+    }
+
     const data = results.map(result => `${result.layout.name} - ${result.result.position}`);
     expect(data.sort()).to.eql([
       "Colemak - 744",
