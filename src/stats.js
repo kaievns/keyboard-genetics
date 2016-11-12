@@ -1,76 +1,91 @@
 /**
- * Creates basic stats results on a layout evaluation
+ * Smarts around digesting the runner results and comparing them to each other
  */
-const { FINGER_STRENGS } = require("./config");
 
-module.exports = function Stats(position, effort, distance, counts) {
-  const fingers  = fingers_utilization(counts);
-  const symmetry = fingers.symmetry;
-  const evenness = fingers.evenness;
-  const balance  = position / 2 / 200 * (symmetry + evenness);
-
-  const total    = position + Math.round(balance);
-
-  return Object.assign({ position, effort, distance, total }, fingers);
+const strengths = [0.75, 0.9, 1.0, 0.95];
+const fingers = 'l-pinky l-ring l-middle l-point r-point r-middle r-ring r-pinky'.split(' ');
+const sum = list => list.reduce((sum, i) => sum + i, 0);
+const values = object => Object.keys(object).map(key => object[key]);
+const percentify = value => Math.round(value * 100);
+const percentages = list => {
+  const total = sum(list);
+  return list.map(value => percentify(value / total));
 };
+const diff = (one, two) => Math.min(one, two) / Math.max(one, two) || 1;
+const avg = list => sum(list) / list.length || 1;
 
-function fingers_utilization(counts) {
-  const ls = counts["l-pinky"];
-  const lr = counts["l-ring"];
-  const lm = counts["l-middle"];
-  const lp = counts["l-point"];
+module.exports = class Stats {
+  constructor(data) {
+    this.data = data;
+  }
 
-  const rs = counts["r-pinky"];
-  const rr = counts["r-ring"];
-  const rm = counts["r-middle"];
-  const rp = counts["r-point"];
+  get overheads() {
+    return sum(values(this.data.overheads));
+  }
 
-  const total = ls + lr + lm + lp + rs + rr + rm + rp;
+  get effort() {
+    return this.data.effort;
+  }
 
-  let fingers = [
-    ls / total, lr / total, lm / total, lp / total,
-    rp / total, rm / total, rr / total, rs / total,
-  ];
+  get distance() {
+    return this.data.distance;
+  }
 
-  let hands = [
-    (ls + lr + lm + lp)/total, (rs + rr + rm + rp) / total
-  ];
+  get position() {
+    return this.data.position;
+  }
 
-  const symmetry = calculate_symmetry(...fingers);
-  const evenness = calculate_evenness(...fingers);
+  get fingersUsage() {
+    const counts = fingers.map(name => this.data.counts[name]);
+    return percentages(counts.map(counts => sum(counts)));
+  }
 
-  fingers = fingers.map(percentify);
-  hands   = hands.map(percentify);
+  get handsUsage() {
+    return percentages(fingers.reduce(([left, right], name) => {
+      const count = sum(this.data.counts[name]);
+      if (name[0] === 'l') left += count;
+      if (name[0] === 'r') right += count;
+      return [left, right];
+    }, [0, 0]));
+  }
 
-  return { fingers, hands, symmetry, evenness };
-}
+  get rowsUsage() {
+    return percentages(fingers.reduce((rows, name) => {
+      for (let row=0, counts = this.data.counts[name]; row < counts.length; row++) {
+        rows[row] += counts[row];
+      }
+      return rows;
+    }, [0, 0, 0, 0]));
+  }
 
-function calculate_symmetry(ls, lr, lm, lp, rp, rm, rr, rs) {
-  const p = diff_match(lp, rp);
-  const m = diff_match(lm, rm);
-  const r = diff_match(lr, rr);
-  const s = diff_match(ls, rs);
+  get symmetry() {
+    // row by row diffs for each finger
+    const diffs = [0,1,2,3].map(index =>
+      this.data.counts[fingers[index]].map((count, i) =>
+        diff(count, this.data.counts[fingers[7-index]][i])
+      ).slice(1)
+    );
 
-  return percentify((p + m + r + s) / 4);
-}
+    // overall average in percents
+    return percentify(avg(diffs.map(list => avg(list))));
+  }
 
-function calculate_evenness(ls, lr, lm, lp, rp, rm, rr, rs) {
-  const v1 = diff_match(ls * 1/FINGER_STRENGS['a'], 0.125);
-  const v2 = diff_match(lr * 1/FINGER_STRENGS['b'], 0.125);
-  const v3 = diff_match(lm * 1/FINGER_STRENGS['c'], 0.125);
-  const v4 = diff_match(lp * 1/FINGER_STRENGS['d'], 0.125);
-  const v5 = diff_match(rs * 1/FINGER_STRENGS['e'], 0.125);
-  const v6 = diff_match(rr * 1/FINGER_STRENGS['f'], 0.125);
-  const v7 = diff_match(rm * 1/FINGER_STRENGS['g'], 0.125);
-  const v8 = diff_match(rp * 1/FINGER_STRENGS['h'], 0.125);
+  get evenness() {
+    const [ls,lr,lm,lp,rp,rm,rr,rs] = this.fingersUsage;
+    const percentsPerFinger = [ls + rs, lr + rr, lm + rm, lp + lp];
+    const correctedByStrength = percentsPerFinger.map((p, i) => p / strengths[i]);
+    const diffs = correctedByStrength.map(percent => diff(percent, 25));
 
-  return percentify((v1+v2+v3+v4+v5+v6+v7+v8) / 8);
-}
+    return percentify(avg(diffs));
+  }
 
-function diff_match(one, two) {
-  return Math.min(one, two) / Math.max(one, two) || 1;
-}
+  get score() {
+    const { position, symmetry, evenness } = this;
+    const bonuses = [symmetry, evenness].map(percent =>
+      // normalized to the 1/5th of the reached text position
+      Math.round(position / 5 / 100 * percent)
+    );
 
-function percentify(value) {
-  return Math.round(value * 100);
-}
+    return position + sum(bonuses);
+  }
+};

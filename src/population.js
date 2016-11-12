@@ -1,5 +1,5 @@
 const Genome     = require("./genome");
-const { QWERTY } = require("./layout");
+const { QWERTY } = require("./presets");
 
 const POPULATION_SIZE = 15;
 

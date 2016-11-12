@@ -1,7 +1,6 @@
 const Layout      = require("./layout");
 const { FINGERS } = require("./config");
-const { QWERTYER }  = Layout;
-const QWERTY = QWERTYER
+const { QWERTY }  = require("./presets");
 
 const QWERTY_SEQUENCE = QWERTY.toSequence();
 const LOCK_POSITIONS  = {}; `
