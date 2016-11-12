@@ -106,12 +106,12 @@ exports.addResult = function addResult(layout, score, no_changes_in, max_no_chag
     `\n\n\n\n\n\n\n`+
     `Symmetry: ${chalk.gray(score.symmetry+"%")}\n`+
     `Evenness: ${chalk.gray(score.evenness+"%")}\n`+
-    `Hands: ${chalk.gray(score.hands.map(v => v+"%").join(" | "))}`
+    `Hands: ${chalk.gray(score.handsUsage.map(v => v+"%").join(" | "))}`
   );
 
   fingers_chart.setData({
-    titles: score.fingers.map(() => " "),
-    data:   score.fingers
+    titles: score.fingersUsage.map(() => " "),
+    data:   score.fingersUsage
   });
 
   results.push({layout: layout, score: score});

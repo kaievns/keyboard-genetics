@@ -88,4 +88,8 @@ module.exports = class Stats {
 
     return position + sum(bonuses);
   }
+
+  get total() {
+    return this.score;
+  }
 };

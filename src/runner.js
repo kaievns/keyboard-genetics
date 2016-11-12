@@ -1,3 +1,5 @@
+const { EFFORT_LIMIT, SAME_FINGER_PENALTY, SAME_HAND_PENALTY } = require('./config');
+
 module.exports = class Runner {
   constructor(text, options) {
     this.text = text.trim();
@@ -6,9 +8,9 @@ module.exports = class Runner {
 
   typeWith(layout) {
     const {
-      effortLimit = 100,
-      sameFingerPenalty = 1,
-      sameHandPenalty = 1
+      effortLimit       = EFFORT_LIMIT,
+      sameFingerPenalty = SAME_FINGER_PENALTY,
+      sameHandPenalty   = SAME_HAND_PENALTY
     } = this.options;
     const mapping = layout.toMetrics();
     const text = this.text;

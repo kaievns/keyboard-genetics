@@ -4,6 +4,10 @@
  * __NOTE__ all of the values are normalized by a 1/10th of a key size
  */
 
+exports.EFFORT_LIMIT        = 3000000;
+exports.SAME_FINGER_PENALTY = 5; // multiplier
+exports.SAME_HAND_PENALTY   = 0.5; // multiplier
+
 // just a mapping for easier conversions
 const COORDINATES = parseMapping(`
  ~ 1 2 3 4 5 6 7 8 9 0 - =
