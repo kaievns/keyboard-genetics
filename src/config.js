@@ -4,9 +4,9 @@
  * __NOTE__ all of the values are normalized by a 1/10th of a key size
  */
 
-exports.EFFORT_LIMIT        = 3000000;
-exports.SAME_FINGER_PENALTY = 5; // multiplier
-exports.SAME_HAND_PENALTY   = 0.5; // multiplier
+exports.EFFORT_LIMIT        = 2000000;
+exports.SAME_FINGER_PENALTY = 10; // multiplier
+exports.SAME_HAND_PENALTY   = 1; // multiplier
 
 // just a mapping for easier conversions
 const COORDINATES = parseMapping(`
@@ -30,7 +30,7 @@ exports.DISTANCES = buildMapping(`
 exports.EFFORTS = buildMapping(`
   17 14 08 08 13 16 23 19 09 08 07 15 17
      06 02 01 06 11 14 09 01 01 07 09 13 18
-     00 00 00 00 07 07 00 00 00 00 05 11
+     01 00 00 00 07 07 00 00 00 01 05 11
        07 08 10 06 10 04 02 05 05 03
   05               00                 11
 `);

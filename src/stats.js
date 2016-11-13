@@ -2,7 +2,7 @@
  * Smarts around digesting the runner results and comparing them to each other
  */
 
-const strengths = [0.75, 0.9, 1.0, 0.95];
+const strengths = [0.75, 0.9, 1.0, 0.95, 0.95, 1.0, 0.9, 0.75];
 const fingers = 'l-pinky l-ring l-middle l-point r-point r-middle r-ring r-pinky'.split(' ');
 const sum = list => list.reduce((sum, i) => sum + i, 0);
 const values = object => Object.keys(object).map(key => object[key]);
@@ -71,10 +71,9 @@ module.exports = class Stats {
   }
 
   get evenness() {
-    const [ls,lr,lm,lp,rp,rm,rr,rs] = this.fingersUsage;
-    const percentsPerFinger = [ls + rs, lr + rr, lm + rm, lp + lp];
+    const percentsPerFinger = this.fingersUsage;
     const correctedByStrength = percentsPerFinger.map((p, i) => p / strengths[i]);
-    const diffs = correctedByStrength.map(percent => diff(percent, 25));
+    const diffs = correctedByStrength.map(percent => diff(percent, 12.5));
 
     return percentify(avg(diffs));
   }
@@ -90,6 +89,6 @@ module.exports = class Stats {
   }
 
   get total() {
-    return this.score;
+    return this.position;
   }
 };

@@ -87,14 +87,14 @@ describe('Stats', () => {
   });
 
   it('calculates fingers load evenness', () => {
-    expect(qwerty.evenness).to.eql(78);
-    expect(colemak.evenness).to.eql(86);
-    expect(workman.evenness).to.eql(83);
+    expect(qwerty.evenness).to.eql(77);
+    expect(colemak.evenness).to.eql(82);
+    expect(workman.evenness).to.eql(87);
   });
 
   it('calculates the total score', () => {
     expect(qwerty.score).to.eql(515);
-    expect(colemak.score).to.eql(985);
-    expect(workman.score).to.eql(1084);
+    expect(colemak.score).to.eql(979);
+    expect(workman.score).to.eql(1091);
   });
 });
