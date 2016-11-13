@@ -1,7 +1,7 @@
 const Genome     = require("./genome");
 const { QWERTY } = require("./presets");
 
-const POPULATION_SIZE = 15;
+const POPULATION_SIZE = 16;
 
 module.exports = class Population {
   static random() {
@@ -29,37 +29,38 @@ module.exports = class Population {
   }
 
   // using the tournament selection
-  pickTwo() {
-    const random_func = () => Math.random() > 0.5 ? 1 : Math.random() > 0.5 ? 0 : -1;
-    const random_list = [].concat(this.genomes).sort(random_func);
-    const random_half = random_list.slice(0, random_list.length / 2 | 0);
-    const weighted    = this.sortByScores(random_half);
+  tournamentWinner() {
+    const tournamentSize  = 4; //Math.max(2, this.genomes.length / 4 | 0);
+    const tournamentBatch = [];
 
-    return weighted.slice(0, 2);
+    while (tournamentBatch.length < tournamentSize) {
+      tournamentBatch.push(this.genomes[Math.random() * this.genomes.length | 0]);
+    }
+
+    return this.sortByScores(tournamentBatch)[0];
   }
 
   next(options) {
-    const elite   = (options || {}).elite;
-    const mutate  = (options || {}).mutate;
-    const genomes = this.pickTwo();
-    const first   = genomes[0];
-    const second  = genomes[1];
+    const { elite, mutate: mutationLevel } = options || {};
+    const newPopulation = [];
 
     // first stage with minimal mutations to have the good parts locked in
-    while (genomes.length < this.genomes.length * 2/3) {
-      genomes.push(first.mutate(1));
-      genomes.push(second.mutate(1));
+    while (newPopulation.length < this.genomes.length * 1/2) {
+      newPopulation.push(this.tournamentWinner().mutate(1));
     }
 
     // a more aggressive second stage to bring more variations into the system
-    while (genomes.length < this.genomes.length) {
-      genomes.push(first.mutate(mutate));
-      genomes.push(second.mutate(mutate));
+    while (newPopulation.length < this.genomes.length * 3/4) {
+      newPopulation.push(this.tournamentWinner().mutate(mutationLevel));
     }
 
-    elite && genomes.unshift(this.best());
+    while (newPopulation.length < this.genomes.length) {
+      newPopulation.push(this.tournamentWinner().mutate(mutationLevel * 2));
+    }
 
-    return new Population(genomes.slice(0, this.genomes.length), this.number + 1);
+    elite && newPopulation.unshift(this.best());
+
+    return new Population(newPopulation.slice(0, this.genomes.length), this.number + 1);
   }
 
   best() {
