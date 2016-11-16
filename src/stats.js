@@ -90,6 +90,6 @@ module.exports = class Stats {
 
   get total() {
     const overhead_reduction_bonus = this.position/(this.overheads / this.effort)
-    return overhead_reduction_bonus;
+    return this.position + overhead_reduction_bonus / 10;
   }
 };

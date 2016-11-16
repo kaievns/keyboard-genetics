@@ -17,8 +17,8 @@ module.exports = class Runner {
     const L_SHIFT = mapping['l-shift'];
     const R_SHIFT = mapping['r-shift'];
     const counts  = Object.assign(Object.create(null), {
-      'l-pinky': [0,0,0,0], 'l-ring': [0,0,0,0], 'l-middle': [0,0,0,0], 'l-point': [0,0,0,0],
-      'r-pinky': [0,0,0,0], 'r-ring': [0,0,0,0], 'r-middle': [0,0,0,0], 'r-point': [0,0,0,0]
+      'l-pinky': [0,0,0,0,0], 'l-ring': [0,0,0,0,0], 'l-middle': [0,0,0,0,0], 'l-point': [0,0,0,0,0],
+      'r-pinky': [0,0,0,0,0], 'r-ring': [0,0,0,0,0], 'r-middle': [0,0,0,0,0], 'r-point': [0,0,0,0,0]
     });
 
     let position = 0;
