@@ -1,7 +1,7 @@
 const Genome     = require("./genome");
 const { QWERTY } = require("./presets");
 
-const POPULATION_SIZE = 16;
+const POPULATION_SIZE = 12;
 
 module.exports = class Population {
   static random() {
@@ -30,7 +30,7 @@ module.exports = class Population {
 
   // using the tournament selection
   tournamentWinner() {
-    const tournamentSize  = 4; //Math.max(2, this.genomes.length / 4 | 0);
+    const tournamentSize  = 3; //Math.max(2, this.genomes.length / 4 | 0);
     const tournamentBatch = [];
 
     while (tournamentBatch.length < tournamentSize) {
@@ -45,18 +45,18 @@ module.exports = class Population {
     const newPopulation = [];
 
     // first stage with minimal mutations to have the good parts locked in
-    while (newPopulation.length < this.genomes.length * 1/2) {
+    while (newPopulation.length < this.genomes.length * 3/4) {
       newPopulation.push(this.tournamentWinner().mutate(1));
     }
 
     // a more aggressive second stage to bring more variations into the system
-    while (newPopulation.length < this.genomes.length * 3/4) {
+    while (newPopulation.length < this.genomes.length) {
       newPopulation.push(this.tournamentWinner().mutate(mutationLevel));
     }
 
-    while (newPopulation.length < this.genomes.length) {
-      newPopulation.push(this.tournamentWinner().mutate(mutationLevel * 2));
-    }
+    // while (newPopulation.length < this.genomes.length) {
+    //   newPopulation.push(this.tournamentWinner().mutate(mutationLevel * 2));
+    // }
 
     elite && newPopulation.unshift(this.best());
 

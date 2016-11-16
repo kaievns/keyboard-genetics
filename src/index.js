@@ -11,7 +11,7 @@ const cluster      = new Cluster(data);
 const use_elites   = true;
 const mutate_level = 3;
 const seed_layouts = [QWERTY, Workman];
-const max_no_chage = 50;
+const max_no_chage = 80;
 
 co(boot).catch(e => console.log(e.stack));
 

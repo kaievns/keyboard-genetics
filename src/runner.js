@@ -64,17 +64,13 @@ module.exports = class Runner {
           const overhead = prevShift.effort * sameHandPenalty;
           // console.log('     retraction from shift overhead');
           effort += overhead;
-          sameHandOverheads += overhead;
+          shiftingOverheads += overhead;
         }
       }
 
       // pressing the shift button overhead
       if (key.shift) {
         prevShift = hand === 'r' ? L_SHIFT : R_SHIFT;
-        // console.log('     pressing shift overhead', prevShift.effort);
-        effort += prevShift.effort;
-        shiftingOverheads += prevShift.effort;
-        distance += prevShift.distance;
       } else {
         prevShift = null;
       }

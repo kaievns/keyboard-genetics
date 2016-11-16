@@ -5,8 +5,8 @@ const { QWERTY }  = require("./presets");
 const QWERTY_SEQUENCE = QWERTY.toSequence();
 const LOCK_POSITIONS  = {}; `
   \`:\` 1:1 2:2 3:3 4:4 5:5 6:6 7:7 8:8 9:9 0:0 -:- =:=
-          r:e         ;:y       u:i   [:[ ]:] \\:\\
-  h:a s:s n:d t:f  ,:g .:h a:j e:k o:l i:; ':' \\n:\\n
+        l:w r:e          ;:y    u:i d:o   [:[ ]:] \\:\\
+    h:a s:s t:d n:f ,:g .:h a:j e:k o:l i:; ':' \\n:\\n
                       /:b y:n
 `.trim().split(/\s+/).map(i => {
   const [key, value] = i.split(":");

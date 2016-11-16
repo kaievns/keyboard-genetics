@@ -20,14 +20,14 @@ describe('Cluster', () => {
 
     const data = results.map(result => `${result.layout.name} - ${result.result.position}`);
     expect(data.sort()).to.eql([
-      "Colemak - 715",
-      "Colemak - 715",
-      "Dvorak - 569",
-      "Dvorak - 569",
-      "QWERTY - 400",
-      "QWERTY - 400",
-      "Workman - 753",
-      "Workman - 753"
+      "Colemak - 771",
+      "Colemak - 771",
+      "Dvorak - 595",
+      "Dvorak - 595",
+      "QWERTY - 420",
+      "QWERTY - 420",
+      "Workman - 859",
+      "Workman - 859"
     ]);
   });
 });

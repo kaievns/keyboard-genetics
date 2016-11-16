@@ -100,13 +100,21 @@ exports.logGrade = function logGrade(layout, score) {
 }
 
 exports.addResult = function addResult(layout, score, no_changes_in, max_no_chage) {
+  const { data: { overheads: { sameFinger, sameHand, shifting} } } = score;
+  const overheads = {
+    finger: sameFinger / score.effort * 100 | 0,
+    hand: sameHand / score.effort * 100 | 0,
+    shift: shifting / score.effort * 100 | 0
+  };
+
   details.setContent(
     `Name: ${chalk.red(layout.name)}, scored: ${chalk.yellow(humanize(score.total))}, dist: ${chalk.magenta(humanize(score.position))}\n\n` +
     `${heatmap(layout.toString())}\n\n` +
     `\n\n\n\n\n\n\n`+
     `Symmetry: ${chalk.gray(score.symmetry+"%")}\n`+
     `Evenness: ${chalk.gray(score.evenness+"%")}\n`+
-    `Hands: ${chalk.gray(score.handsUsage.map(v => v+"%").join(" | "))}`
+    `Hands: ${chalk.gray(score.handsUsage.map(v => v+"%").join(" | "))}\n`+
+    `Overheads: ${chalk.gray(`F:${overheads.finger}%, H:${overheads.hand}%, S:${overheads.shift}%`)}`
   );
 
   fingers_chart.setData({

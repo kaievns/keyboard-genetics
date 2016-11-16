@@ -4,7 +4,7 @@
  * __NOTE__ all of the values are normalized by a 1/10th of a key size
  */
 
-exports.EFFORT_LIMIT        = 1000000;
+exports.EFFORT_LIMIT        = 3000000;
 exports.SAME_FINGER_PENALTY = 10; // multiplier
 exports.SAME_HAND_PENALTY   = 1; // multiplier
 

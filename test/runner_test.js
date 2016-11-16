@@ -1,4 +1,5 @@
 const Runner = require('../src/runner');
+const Layout = require('../src/layout');
 const { QWERTY, Dvorak, Colemak, Workman } = require('../src/presets');
 const text = global.TEXT_FIXTUE;
 
@@ -13,14 +14,14 @@ describe('Runner', () => {
     const result = runner.typeWith(QWERTY);
     delete(result.counts);
     expect(result).to.eql({
-      distance: 3214,
+      distance: 3138,
       effort: 2003,
       overheads: {
-        sameHand: 246,
-        sameFinger: 290,
-        shifting: 120
+        sameFinger: 340,
+        sameHand: 228,
+        shifting: 30
       },
-      position: 400
+      position: 420
     });
   });
 
@@ -28,14 +29,14 @@ describe('Runner', () => {
     const result = runner.typeWith(Dvorak);
     delete(result.counts);
     expect(result).to.eql({
-      distance: 2722,
-      effort: 2019,
+      distance: 2649,
+      effort: 2001,
       overheads: {
-        sameHand: 135,
         sameFinger: 490,
-        shifting: 123
+        sameHand: 96,
+        shifting: 48
       },
-      position: 569
+      position: 595
     });
   });
 
@@ -43,14 +44,14 @@ describe('Runner', () => {
     const result = runner.typeWith(Colemak);
     delete(result.counts);
     expect(result).to.eql({
-      distance: 2933,
-      effort: 2003,
+      distance: 2861,
+      effort: 2002,
       overheads: {
-        sameHand: 305,
         sameFinger: 10,
-        shifting: 162
+        sameHand: 284,
+        shifting: 49
       },
-      position: 715
+      position: 771
     });
   });
 
@@ -58,14 +59,14 @@ describe('Runner', () => {
     const result = runner.typeWith(Workman);
     delete(result.counts);
     expect(result).to.eql({
-      distance: 3389,
-      effort: 2000,
+      distance: 3399,
+      effort: 2004,
       overheads: {
-        sameHand: 231,
-        sameFinger: 250,
-        shifting: 177
+        sameFinger: 260,
+        sameHand: 199,
+        shifting: 64
       },
-      position: 753
+      position: 859
     });
   });
 });
