@@ -9,7 +9,7 @@ const { QWERTY, Workman } = require("./presets");
 const data         = text;
 const cluster      = new Cluster(data);
 const use_elites   = true;
-const mutate_level = 3;
+const mutate_level = 2;
 const seed_layouts = [QWERTY, Workman];
 const max_no_chage = 80;
 

@@ -42,7 +42,7 @@ module.exports = class Population {
 
   next(options) {
     const { elite, mutate: mutationLevel } = options || {};
-    const newPopulation = [];
+    const newPopulation = elite ? [this.best()] : [];
 
     // first stage with minimal mutations to have the good parts locked in
     while (newPopulation.length < this.genomes.length * 3/4) {
@@ -57,8 +57,6 @@ module.exports = class Population {
     // while (newPopulation.length < this.genomes.length) {
     //   newPopulation.push(this.tournamentWinner().mutate(mutationLevel * 2));
     // }
-
-    elite && newPopulation.unshift(this.best());
 
     return new Population(newPopulation.slice(0, this.genomes.length), this.number + 1);
   }
