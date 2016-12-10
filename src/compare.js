@@ -15,7 +15,7 @@ const runner = new Runner(data, { effortLimit: 20000000 });
 // process.exit(0);
 
 
-const Halmak = new Layout("Halmak", `
+const Halmak1 = new Layout("Halmak1", `
 \` 1 2 3 4 5 6 7 8 9 0 - =
  ~ ! @ # $ % ^ & * ( ) _ +
   f l r w k q p u d ; [ ] \\
@@ -40,28 +40,16 @@ const Halmak2 = new Layout("Halmak2", `
 const Halmak21 = new Layout("Halmak21", `
 \` 1 2 3 4 5 6 7 8 9 0 - =
  ~ ! @ # $ % ^ & * < > _ +
-    w l r b z ; q u d j [ ] \\
-    W L R B Z : Q U D J { } |
-    s h t n , . a e o i ' \\n
-    S H T N ( ) A E O I " \\n
-     f m v c ? y g x k p
-     F M V C / Y G X K P
+  c l r b z ; q u d j [ ] \\
+  C L R B Z : Q U D J { } |
+  s h n t , . a e o i ' \\n
+  S H N T ( ) A E O I " \\n
+  f m v w ? y g x k p
+  F M V W / Y G X K P
 `);
-
-const Halmak22 = new Layout("Halmak22", `
-\` 1 2 3 4 5 6 7 8 9 0 - =
- ~ ! @ # $ % ^ & * < > _ +
- w l r b z ; q u d j [ ] \\
- W L R B Z : Q U D J { } |
- s h t n . , a e o i ' \\n
- S H T N ( ) A E O I " \\n
-  f m v c ? y g x k p
-  F M V C / Y G X K P
-`);
-
 
 const LAYOUTS = [
-  QWERTY, Workman, Colemak, Dvorak, Halmak, Halmak21, Halmak22
+  QWERTY, Workman, Colemak, Dvorak, Halmak1, Halmak2, Halmak21
 ];
 
 console.log("Running measurements...");
