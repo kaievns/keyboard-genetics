@@ -5,7 +5,7 @@ const { text, trigrams, docs, code } = require("./data");
 const { QWERTY, Workman, Colemak, Dvorak } = require('./presets');
 
 const data = text;
-const runner = new Runner(data, { effortLimit: 20000000 });
+const runner = new Runner(data, { effortLimit: 40000000 });
 // const symbols = ['<','\\[','\\{','`','~','\!','@','\$','%','\\^','&','\\*','\\(','-','_','\\+','\\=','\\|', '\\\\','\\/'];
 // const entries = symbols.map(symbol => (
 //   [symbol, data.match(new RegExp(symbol, "g")).length]
@@ -48,8 +48,21 @@ const Halmak21 = new Layout("Halmak21", `
   F M V W / Y G X K P
 `);
 
+const Halmak22 = new Layout("Halmak22", `
+\` 1 2 3 4 5 6 7 8 9 0 - =
+ ~ ! @ # $ % ^ & * < > _ +
+ w l r b z ; q u d j [ ] \\
+ W L R B Z : Q U D J { } |
+ s h n t , . a e o i ' \\n
+ S H N T ( ) A E O I " \\n
+ f m v c ? g p x k y
+ F M V C / G P X K Y
+`);
+
+
+
 const LAYOUTS = [
-  QWERTY, Workman, Colemak, Dvorak, Halmak1, Halmak2, Halmak21
+  QWERTY, Workman, Colemak, Dvorak, Halmak1, Halmak2, Halmak21, Halmak22
 ];
 
 console.log("Running measurements...");

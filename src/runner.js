@@ -51,13 +51,13 @@ module.exports = class Runner {
       // various hand movement overheads
       if (hand !== false && key !== prevKey) { // skipping repeats and spaces
         if (finger === prevKey.finger) { // same finger usage penalty
-          const prevEffort = prevKey.effort === 0 ? 1 : prevKey.effort;
+          const prevEffort = prevKey.effort + 1;
           const overhead = prevEffort * sameFingerPenalty;
           // console.log('      same finger overhead', overhead);
           effort += overhead;
           sameFingerOverheads += overhead;
         } else if (hand === prevKey.hand) { // same hand usage penalty
-          const prevEffort = prevKey.effort === 0 ? 1 : prevKey.effort;
+          const prevEffort = prevKey.effort + 1;
           const overhead = prevEffort * sameHandPenalty;
           // console.log('      same hand overhead', overhead);
           effort += overhead;
